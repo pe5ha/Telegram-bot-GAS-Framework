@@ -1,9 +1,10 @@
+// версия 1
 
 /**
  * Логирование всех сообщений, нажатий кнопок и всего прочего приходящего в бота в таблицу
  * @param {String} text - Текст обновления в нужном для таблице виде
  */
-function logUpdate(action, text) {
+ function logUpdate(action, text) {
   if(doNotLog) return;
   let tLog = table.getSheetByName(LogSheet.SheetName);
   if(tLog == null) { // если такого листа нет
@@ -11,9 +12,6 @@ function logUpdate(action, text) {
     tLog = table.getSheetByName(LogSheet.SheetName);
     let style = SpreadsheetApp.newTextStyle().setBold(true).setItalic(true).build();
     tLog.getRange(1,1,1,LogSheet.getColumnsOrder().length).setValues([LogSheet.getColumnsOrder()]).setTextStyle(style).setHorizontalAlignment("center");
-    try {
-      tLog.deleteRows(3,998);
-    } catch (error) {}
   }
   tLog.insertRowBefore(2);
   let logdate = date ? stringDate(date*1000) : stringDate();
@@ -21,18 +19,32 @@ function logUpdate(action, text) {
   tLog.getRange(2,1,1,logData.length).setValues([logData]);
 }
 
+function logBotCopying(chat_id, message_id) {
+  if(doNotLog) return;
+  let tLog = table.getSheetByName(LogSheet.SheetName);
+  if(tLog == null) { // если такого листа нет
+    table.insertSheet(LogSheet.SheetName); // то такой лист создаётся
+    tLog = table.getSheetByName(LogSheet.SheetName);
+    let style = SpreadsheetApp.newTextStyle().setBold(true).setItalic(true).build();
+    tLog.getRange(1,1,1,LogSheet.getColumnsOrder().length).setValues([LogSheet.getColumnsOrder()]).setTextStyle(style).setHorizontalAlignment("center");
+  }
+  tLog.insertRowBefore(2);
+  let logData = [stringDate(),chat_id,"","",message_id, "Отправлена копия"];
+  tLog.getRange(2,1,1,logData.length).setValues([logData]);
+}
+
 /**
  * Логирование всего что исходит пользователям ИЗ бота. То есть сообщения от бота
  * @param {String} text - Текст обновления в нужном для таблице виде
  */
-function logBotSending(text,action="") {
+function logBotSending(text) {
   if(doNotLogBotSending) return;
   let tLog = table.getSheetByName(LogSheet.SheetName);
   if(!tLog) return;
 
   tLog.insertRowBefore(2);
   let logdate = date ? stringDate(date*1000) : stringDate();
-  let logData = [[logdate,chat_id,nick,name,"",action,"",text]];
+  let logData = [[logdate,chat_id,nick,name,"","","",text]];
   // TODO chat_id заменить на имя ЧАТА (групповой чат или диалог)
   tLog.getRange(2,1,1,logData[0].length).setValues(logData);
 }
@@ -43,9 +55,6 @@ function logDebug(e){
   if(tDebug == null) { // если такого листа нет
     table.insertSheet(DebugSheet.SheetName); // то такой лист создаётся
     tDebug = table.getSheetByName(DebugSheet.SheetName);
-    try {
-      tDebug.deleteRows(5,990);
-    } catch (error) {}
   }
   tDebug.getRange(1, 3).setValue(JSON.stringify(e, null, 5));
   let contents = JSON.parse(e.postData.contents);

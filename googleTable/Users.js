@@ -1,3 +1,4 @@
+// версия 1
 
 let user = {
   telegramID: null,
@@ -5,27 +6,13 @@ let user = {
   name: null,
   currentAction: null,
   role: null,
-  phone: null,
   rowInTable: null,
   isNewUser: null,
-  setUserRole(newRole){
-    tUsers.use().getRange(this.rowInTable,tUsers.getCol(tUsers.role_Title)+1).setValue(newRole);
-    this.role = newRole;
-  },
-  setUserName(newName){
-    tUsers.use().getRange(this.rowInTable,tUsers.getCol(tUsers.name_Title)+1).setValue(newName);
-    this.name = newName;
-  },
-  setUserPhone(newPhone){
-    tUsers.use().getRange(this.rowInTable,tUsers.getCol(tUsers.phone_Title)+1).setValue(newPhone);
-    this.phone = newPhone;
-  },
-  setUserCurrentAction(currentAction){
-    tUsers.use().getRange(this.rowInTable, tUsers.getCol(tUsers.current_action_Title)+1).setValue(currentAction);
-  },
+  avtivity: null,
+  email: null,
 };
 
-function makeUser(rowInTable, telegramID,nick,name,currentAction=null,role=null,tariff=null,isNewUser=false){
+function makeUser(rowInTable, telegramID,nick,name,currentAction=null,role=null,avtivity=null,email=null,isNewUser=false){
   user.telegramID= telegramID;
   user.nick= nick;
   user.name= name;
@@ -33,10 +20,10 @@ function makeUser(rowInTable, telegramID,nick,name,currentAction=null,role=null,
   user.role= role;
   user.rowInTable= rowInTable;
   user.isNewUser= isNewUser;
-  user.tariff= tariff;
+  user.avtivity= avtivity;
+  user.email= email;
   return user;
 }
-
 
 /**
  * 
@@ -62,12 +49,68 @@ function setUserRole(user,role){
   user.role=role;
 }
 
+/**
+ * 
+ * @param {user} user 
+ * @param {String} currentAction 
+ */
 function setUserCurrentAction(user,currentAction){
-  tUsers.use().getRange(user.rowInTable, tUsers.getCol(tUsers.current_action_Title)+1).setValue(currentAction);
+  let row = user.rowInTable;
+  let col = tUsers.getCol(tUsers.current_action_Title)+1;
+  if(currentAction)
+    tUsers.use().getRange(row, col).setValue(currentAction);
+  else
+    tUsers.use().getRange(row, col).clear();
+  user.currentAction = currentAction;
 }
 
 
-function setUserLanguage(user,language_code){
-  user.language_code = language_code;
-  tUsers.use().getRange(user.rowInTable, tUsers.getCol(tUsers.language_code)+1).setValue(language_code);
+/**
+ * 
+ * @param {user} user 
+ * @param {String} avtivity 
+ */
+function setUserActivity(user,avtivity){
+  let row = user.rowInTable;
+  let col = tUsers.getCol(tUsers.activity_Title)+1;
+  if(avtivity)
+    tUsers.use().getRange(row, col).setValue(avtivity);
+  else
+    tUsers.use().getRange(row, col).clear();
+  user.avtivity = avtivity;
+}
+
+/**
+ * 
+ * @param {user} user 
+ * @param {number} stage 
+ */
+function setUserStage(user,stage){
+  usersStages = tUsersStage.use().getRange(tUsers.allRange).getValues(); // массив всех значений id
+  let row = -1;
+  let i;
+  for (i = 1; i < usersStages.length; i++) { // цикл от 0 до сколько всего юзеров
+    if (usersStages[i][0] == "") break;
+    if(usersStages[i][0] == user.telegramID){
+      row = i + 1;
+    }
+  }
+  if(row == -1){
+    tUsersStage.use().insertRowAfter(i+1);
+    tUsersStage.use().getRange(i+1,1,1,2).setValues([[user.telegramID,stage]]);
+    user.stage = stage;
+    return;
+  }
+
+  let col = tUsersStage.getCol(tUsersStage.stage_Title)+1;
+  if(stage)
+    tUsersStage.use().getRange(row, col).setValue(stage);
+  else
+    tUsersStage.use().getRange(row, col).clear();
+  user.stage = stage;
+}
+
+
+function setUserLastStoryId(user,storyId){
+  tUsers.use().getRange(user.rowInTable, tUsers.getCol(tUsers.current_action_Title)+1).setValue(storyId);
 }

@@ -1,21 +1,3 @@
-/**
- * Версия 1
- * Можно легко отключать от контейнера и передеплоить как web app, а можно ли и то и то??
- */
-
-let contents;
-// bot service variables
-let chat_id;
-let user_id;
-let name;
-let nick;
-let date;
-let message_id;
-let text = "";
-let data;
-let textToSend;
-let language_code;
-
 
 
 function debugDoPost(){
@@ -30,7 +12,7 @@ function doPost(e) {
     entryPoint(e);
   }
   catch (err) {
-    botSendText(errorMessagesChat, err.stack);
+    botSendText(errorMessagesChat,err.stack);
   }
 }
 
@@ -38,7 +20,7 @@ function entryPoint(e){
 
   logDebug(e);
   
-  contents = JSON.parse(e.postData.contents);
+  let contents = JSON.parse(e.postData.contents);
 
   if (contents.message != null) {
     messageReceived(contents.message);
@@ -52,10 +34,8 @@ function entryPoint(e){
     editMessageReceived(contents.edited_message);
   }
 
-  return;
 
   // other updates
-  /*
   else if (contents.channel_post !== null) {
 
   }
@@ -111,7 +91,6 @@ function entryPoint(e){
   else if (contents.chat_join_request !== null) {
 
   }
-  */
 
 
   /**

@@ -1,9 +1,12 @@
 // версия 1
 
 function directMessage(){
+  // userRegister(user_id);
+
+  const userRegister = new UserRegister(tUsers, stringDate);
 
   // initial user checking
-  userRegister(user_id);
+  userRegister.register(user_id, nick, name);
 
   
   if (text.startsWith("/")) { 

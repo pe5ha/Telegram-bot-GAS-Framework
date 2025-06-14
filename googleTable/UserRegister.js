@@ -65,28 +65,6 @@ class UserRegister {
   constructor(tUsers, stringDate) {
     this.tUsers = tUsers;
     this.stringDate = stringDate;
-    this._initSheet();
-  }
-
-  /**
-   * Инициализирует лист пользователей (создает при необходимости)
-   * @private
-   */
-  _initSheet() {
-    if (this.tUsers.use() == null) {
-      const sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet(this.tUsers.sheetName);
-      const style = SpreadsheetApp.newTextStyle()
-        .setBold(true)
-        .setItalic(true)
-        .build();
-      
-      sheet.getRange(1, 1, 1, this.tUsers.getColumnsOrder().length)
-        .setValues([this.tUsers.getColumnsOrder()])
-        .setTextStyle(style)
-        .setHorizontalAlignment("center");
-      
-      sheet.deleteRows(3, 995);
-    }
   }
 
   /**
@@ -137,14 +115,12 @@ class UserRegister {
       .setTable(this.tUsers);
     
     const userData = [
-      [
         this.stringDate(),
         user.telegramID,
         user.nick,
         user.name,
         user.currentAction,
         user.role
-      ]
     ];
 
     this.tUsers.use().appendRow(userData);

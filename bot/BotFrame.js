@@ -13,7 +13,8 @@ let phone;
 // users data arrays gets from Users sheet
 let usersData; 
 
-const user = new User();
+// globalUser
+let user;
 
 // let token = process.env.BOT_TOKEN;
 let token = PropertiesService.getScriptProperties().getProperty('BOT_TOKEN');

@@ -22,6 +22,9 @@ function entryPoint(e){
   
   let contents = JSON.parse(e.postData.contents);
 
+  //initialization
+  user = new User();
+
   if (contents.message != null) {
     messageReceived(contents.message);
   }

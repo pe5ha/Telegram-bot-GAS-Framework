@@ -1,5 +1,5 @@
 class User {
-  constructor(rowInTable, telegramID, nick, name, currentAction = null, role = null, activity = null, email = null, isNewUser = false) {
+  constructor(rowInTable, telegramID, nick, name, currentAction = null, role = null, activity = null, properties = null, isNewUser = false) {
     this.telegramID = telegramID;
     this.nick = nick;
     this.name = name;
@@ -8,7 +8,7 @@ class User {
     this.rowInTable = rowInTable;
     this.isNewUser = isNewUser;
     this.activity = activity;
-    this.email = email;
+    this.properties = properties;
     this.tUsers = null;
   }
 

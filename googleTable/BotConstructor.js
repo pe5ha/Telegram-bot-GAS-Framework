@@ -1,12 +1,9 @@
-
-
 //User roles
 let UserRoles = {
   without_role: "",
   admin: "admin",
 
 }
-
 
 //User Current Actions (use cases)
 let UserActions = {
@@ -22,8 +19,6 @@ let AdminActions = {
   input_push_b: "input_push_b",
   input_helloMessage: "input_helloMessage",
 }
-
-
 
 let BotStrings = {
   bot_start_message: "Привет!",
@@ -42,67 +37,7 @@ let BotStrings = {
 }
 
 
-
-// Users sheet structure
-let tUsers = {
-  sheetName: "Users",
-  reg_date_Title: "дата регистрации",
-  id_Title: "id",
-  nick_Title: "ник",
-  name_Title: "имя",
-  current_action_Title: "текущее действие",
-  role_Title: "роль",
-  activity_Title: "активность",
-  email_Title: "email",
-  phone_Title: "phone",
-  allRange: "A:I",
-  getColumnsOrder(){
-    return [
-      this.reg_date_Title,	
-      this.id_Title,	
-      this.nick_Title,	
-      this.name_Title,	
-      this.current_action_Title, 
-      this.role_Title,
-      this.activity_Title,
-      this.email_Title,
-      this.phone_Title
-    ];
-  },
-  getCol(columnTitle){
-    return this.getColumnsOrder().indexOf(columnTitle);
-  },
-  use(){
-    return table.getSheetByName(this.sheetName);
-  }
-}
-
-// Logs sheet structure
-let LogSheet = {
-  SheetName: "Log",
-  time_Title: "время",
-  id_Title: "id",
-  nick_Title: "ник",
-  name_Title: "имя",
-  message_id_Title: "message id",
-  action_Title: "действие",
-  what_was_sent_Title: "что прислал",
-  bot_answer_Title: "ответ бота",
-  getColumnsOrder(){
-    return [this.time_Title,	this.id_Title,	this.nick_Title,	this.name_Title,	this.message_id_Title, this.action_Title,this.what_was_sent_Title,this.bot_answer_Title];
-  },
-  getCol(columnTitle){
-    return this.getColumnsOrder().indexOf(columnTitle);
-  }
-}
-
-// Debug sheet structure
-let DebugSheet = {
-  SheetName: "Debug",
-}
-
-
-// Story sheet structure
+/** tStories - Цепочки сообщений (воронки)
 let tStories = {
   sheetName: "Посты",
   number: "номер",
@@ -137,10 +72,9 @@ let tStories = {
     return sheet;
   }
 }
+*/
 
-
-
-
+/** tPush - лист для отправки выборочных пушей через бота
 let tPush = {
   sheetName: "Push",
   reg_date_Title: "дата регистрации",
@@ -182,9 +116,9 @@ let tPush = {
     return sheet;
   }
 }
+*/
 
-
-// Users sheet structure
+/** tUsersStage - лист для хранения прогресса прохождения этапов в боте ?
 let tUsersStage = {
   sheetName: "UsersProgress",
   id_Title: "id",
@@ -212,6 +146,7 @@ let tUsersStage = {
     return sheet;
   }
 }
+*/
 
 // tBotValues sheet structure
 let tBotValues = {
@@ -263,38 +198,4 @@ let tBotValues = {
   }
 
 
-}
-
-
-
-// Story sheet structure
-let tButtons = {
-  sheetName: "Кнопки",
-  text_Title: "Текст",
-  link_Title: "Ссылка (если есть)",
-  allRange: "A:B",
-  getColumnsOrder(){
-    return [
-      this.text_Title,	
-      this.link_Title
-    ]
-  },
-  getCol(columnTitle){
-    return this.getColumnsOrder().indexOf(columnTitle)+1;
-  },
-  getInd(columnTitle){
-    return this.getColumnsOrder().indexOf(columnTitle);
-  },
-  use(){
-    let sheet = table.getSheetByName(this.sheetName);
-    if(!sheet){
-      sheet = table.insertSheet(this.sheetName);
-      let style = SpreadsheetApp.newTextStyle().setBold(true).setItalic(true).build();
-      sheet.getRange(1,1,1,this.getColumnsOrder().length).setValues([this.getColumnsOrder()])
-      .setTextStyle(style)
-      .setHorizontalAlignment("center");
-      sheet.deleteRows(3,990);
-    }
-    return sheet;
-  }
 }

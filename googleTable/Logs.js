@@ -6,31 +6,17 @@
  */
  function logUpdate(action, text) {
   if(doNotLog) return;
-  let tLog = table.getSheetByName(LogSheet.SheetName);
-  if(tLog == null) { // если такого листа нет
-    table.insertSheet(LogSheet.SheetName); // то такой лист создаётся
-    tLog = table.getSheetByName(LogSheet.SheetName);
-    let style = SpreadsheetApp.newTextStyle().setBold(true).setItalic(true).build();
-    tLog.getRange(1,1,1,LogSheet.getColumnsOrder().length).setValues([LogSheet.getColumnsOrder()]).setTextStyle(style).setHorizontalAlignment("center");
-  }
-  tLog.insertRowBefore(2);
+  tLog.use().insertRowBefore(2);
   let logdate = date ? stringDate(date*1000) : stringDate();
   let logData = [logdate,user_id,nick,name,message_id,action, text];
-  tLog.getRange(2,1,1,logData.length).setValues([logData]);
+  tLog.use().getRange(2,1,1,logData.length).setValues([logData]);
 }
 
 function logBotCopying(chat_id, message_id) {
   if(doNotLog) return;
-  let tLog = table.getSheetByName(LogSheet.SheetName);
-  if(tLog == null) { // если такого листа нет
-    table.insertSheet(LogSheet.SheetName); // то такой лист создаётся
-    tLog = table.getSheetByName(LogSheet.SheetName);
-    let style = SpreadsheetApp.newTextStyle().setBold(true).setItalic(true).build();
-    tLog.getRange(1,1,1,LogSheet.getColumnsOrder().length).setValues([LogSheet.getColumnsOrder()]).setTextStyle(style).setHorizontalAlignment("center");
-  }
-  tLog.insertRowBefore(2);
+  tLog.use().insertRowBefore(2);
   let logData = [stringDate(),chat_id,"","",message_id, "Отправлена копия"];
-  tLog.getRange(2,1,1,logData.length).setValues([logData]);
+  tLog.use().getRange(2,1,1,logData.length).setValues([logData]);
 }
 
 /**
@@ -39,22 +25,19 @@ function logBotCopying(chat_id, message_id) {
  */
 function logBotSending(text) {
   if(doNotLogBotSending) return;
-  let tLog = table.getSheetByName(LogSheet.SheetName);
-  if(!tLog) return;
-
-  tLog.insertRowBefore(2);
+  tLog.use().insertRowBefore(2);
   let logdate = date ? stringDate(date*1000) : stringDate();
   let logData = [[logdate,chat_id,nick,name,"","","",text]];
   // TODO chat_id заменить на имя ЧАТА (групповой чат или диалог)
-  tLog.getRange(2,1,1,logData[0].length).setValues(logData);
+  tLog.use().getRange(2,1,1,logData[0].length).setValues(logData);
 }
 
 function logDebug(e){
   if(doNotLogDebug) return;
-  let tDebug = table.getSheetByName(DebugSheet.SheetName);
+  let tDebug = table.getSheetByName("Debug");
   if(tDebug == null) { // если такого листа нет
-    table.insertSheet(DebugSheet.SheetName); // то такой лист создаётся
-    tDebug = table.getSheetByName(DebugSheet.SheetName);
+    table.insertSheet("Debug"); // то такой лист создаётся
+    tDebug = table.getSheetByName("Debug");
   }
   tDebug.getRange(1, 3).setValue(JSON.stringify(e, null, 5));
   let contents = JSON.parse(e.postData.contents);

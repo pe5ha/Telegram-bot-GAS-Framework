@@ -1,23 +1,22 @@
 // bot service variables
-let chat_id;
-let user_id;
-let name;
-let nick;
-let date;
-let message_id;
-let text = "";
-let data;
-let textToSend;
-let phone;
+let CHAT_ID;
+let USER_ID;
+let USER_NAME;
+let USER_NICK;
+let MESSAGE_DATE;
+let MESSAGE_ID;
+let MESSAGE_TEXT;
+let BUTTON_DATA;
+let USER_PHONE;
 
 // users data arrays gets from Users sheet
-let usersData; 
+let USERS_DATA; 
 
 // globalUser
-let user;
+let USER;
 
-// let token = process.env.BOT_TOKEN;
-let token = PropertiesService.getScriptProperties().getProperty('BOT_TOKEN');
+// TODO-  пересмотреть ниже
+let TOKEN = PropertiesService.getScriptProperties().getProperty('BOT_TOKEN');
 let activeSheet = SpreadsheetApp.getActive();
 let SpreadsheetID;
 if(activeSheet)
@@ -25,9 +24,9 @@ if(activeSheet)
 if(!SpreadsheetID)
   SpreadsheetID = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
 // google tables service variables
-let table = SpreadsheetApp.openById(SpreadsheetID);
+let TABLE = SpreadsheetApp.openById(SpreadsheetID);
 
 
 
-function getToken(){return token;}
-function getTableId(){return table.getId();}  
+function getToken(){return TOKEN;}
+function getTableId(){return TABLE.getId();}  

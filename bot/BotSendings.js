@@ -1,7 +1,7 @@
 function botSendMessage(chat_id, textToSend,keyboard=null,parsemode="HTML",disableWebPagePreview=false){
   if(!keyboard) keyboard = { remove_keyboard: true };
 
-  let telegramResp = TelegramAPI.sendMessage(token, chat_id, textToSend,keyboard,parsemode,disableWebPagePreview);
+  let telegramResp = TelegramAPI.sendMessage(TOKEN, chat_id, textToSend,keyboard,parsemode,disableWebPagePreview);
   afterSending(telegramResp);
 }
 
@@ -64,18 +64,18 @@ function afterCopy(telegramResp,chat_id){
  * @depracated - Зачем если есть метод botSendMessage() ?
  */
 function botSendText(chat_id, textToSend){
-  let telegramResp = TelegramAPI.sendMessage(token, chat_id, textToSend);
+  let telegramResp = TelegramAPI.sendMessage(TOKEN, chat_id, textToSend);
   afterSending(telegramResp);
 }
 
 function botSendTextV2(chat_id, message){
-  let telegramResp = TelegramAPI.sendMessageV2(token, chat_id, message);
+  let telegramResp = TelegramAPI.sendMessageV2(TOKEN, chat_id, message);
   afterSending(telegramResp);
 }
 
 function botCopyMessage(chat_id,from_chat_id,message_id,keyboard=null){
   if(!keyboard) keyboard = { remove_keyboard: true };
 
-  let telegramResp = TelegramAPI.copyMessage(token,chat_id,from_chat_id,message_id,keyboard);
+  let telegramResp = TelegramAPI.copyMessage(TOKEN,chat_id,from_chat_id,message_id,keyboard);
   return afterCopy(telegramResp,chat_id);
 }

@@ -7,15 +7,15 @@ function useCases(){
   /**
    * Проверка на роль админа
    */
-  if(user.role==UserRoles.admin){
+  if(USER.role==UserRoles.admin){
     adminUseCases();
   }
 
   /**
    * Пример события
    */
-  if(text=="Привет"){
-    botSendMessage(chat_id,"Привет, " + name);
+  if(MESSAGE_TEXT=="Привет"){
+    botSendMessage(CHAT_ID,"Привет, " + name);
   }
 
 }

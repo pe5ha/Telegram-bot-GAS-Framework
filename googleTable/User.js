@@ -22,7 +22,7 @@ class User {
   setCurrentAction(currentAction) {
     this._validateTable();
     
-    const col = this.tUsers.getCol(this.tUsers.current_action_Title) + 1;
+    const col = tUsers.getCol(tUsers.columns.currentAction) + 1;
     this._updateCellValue(this.rowInTable, col, currentAction);
     this.currentAction = currentAction;
     
@@ -33,7 +33,7 @@ class User {
   setActivity(activity) {
     this._validateTable();
     
-    const col = this.tUsers.getCol(this.tUsers.activity_Title) + 1;
+    const col = tUsers.getCol(tUsers.columns.activity) + 1;
     this._updateCellValue(this.rowInTable, col, activity);
     this.activity = activity;
     
@@ -44,7 +44,7 @@ class User {
   setRole(role) {
     this._validateTable();
     
-    const col = this.tUsers.getCol(this.tUsers.role_Title) + 1;
+    const col = tUsers.getCol(tUsers.columns.role) + 1;
     this._updateCellValue(this.rowInTable, col, role);
     this.role = role;
     
@@ -53,7 +53,7 @@ class User {
 
   // Приватный метод для обновления значения ячейки
   _updateCellValue(row, col, value) {
-    const range = this.tUsers.use().getRange(row, col);
+    const range = tUsers.use().getRange(row, col);
     if (value) {
       range.setValue(value);
     } else {
@@ -63,7 +63,7 @@ class User {
 
   // Приватный метод для проверки инициализации таблицы
   _validateTable() {
-    if (!this.tUsers) {
+    if (!tUsers) {
       throw new Error('Таблица пользователей не установлена. Сначала вызовите setTable()');
     }
   }

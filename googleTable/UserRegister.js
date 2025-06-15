@@ -1,70 +1,19 @@
-// /**
-//  * Функция регистрации новых пользователей в боте
-//  * @param {Number} id - id искомого пользователя
-//  * @returns false - если такой пользователь уже есть в базе, true - если не было в базе
-//  */
-//  function userRegister(id) {
-//   // поиск юзера в списке уже существующих
-//   if(tUsers.use() == null) { // если такого листа нет
-//     table.insertSheet(tUsers.sheetName); // то такой лист создаётся
-//     let style = SpreadsheetApp.newTextStyle().setBold(true).setItalic(true).build();
-//     tUsers.use().getRange(1,1,1,tUsers.getColumnsOrder().length).setValues([tUsers.getColumnsOrder()]).setTextStyle(style).setHorizontalAlignment("center");
-//     tUsers.use().deleteRows(3,995);
-//   }
-//   usersData = tUsers.use().getRange(tUsers.allRange).getValues(); // массив всех значений id
-//   let row = -1;
-//   let i;
-//   for (i = 0; i < usersData.length; i++) { // цикл от 0 до сколько всего юзеров
-//     if (usersData[i].indexOf(parseInt(id)) !== -1) { // если запрашиваемый id найден
-//       row = i + 1; // то row = номер юзера в массиве + 1, т.к. заголовки
-//       break;
-//     }
-//   }
-
-//   // добавление юзера
-//   if (row === -1) { // если юзер с таким id не записан, то регистрируем его
-//     user = makeUser(2,user_id,nick,name,null,null,null,null,true);
-//     let userData = [[stringDate(),user.telegramID,user.nick,user.name,user.currentAction,user.role]]; // массив данных пользователя
-//     // userData[0].push(surname); // фамилия
-    
-//     tUsers.use().insertRowBefore(2); // в лист юзеров вставляется новая строка сверху (после заголовков)
-//     tUsers.use().getRange(2, 1, 1, userData[0].length).setValues(userData); // вставка инфы юзера
-    
-//     setUserStage(user,0);
-//     return true;
-//   }
-//   else { //апдейт данных о пользователе, которые могли измениться
-//     if (usersData[i][tUsers.getCol(tUsers.nick_Title)] !== nick) {
-//       tUsers.use().getRange(row, tUsers.getCol(tUsers.nick_Title)+1).setValue(nick);
-//     }
-//     if (usersData[i][tUsers.getCol(tUsers.name_Title)] !== name) {
-//       tUsers.use().getRange(row, tUsers.getCol(tUsers.name_Title)+1).setValue(name);
-//     }
-//     user = makeUser(
-//       row,
-//       user_id,
-//       nick,
-//       usersData[i][tUsers.getCol(tUsers.name_Title)],
-//       usersData[i][tUsers.getCol(tUsers.current_action_Title)],
-//       usersData[i][tUsers.getCol(tUsers.role_Title)],
-//       usersData[i][tUsers.getCol(tUsers.activity_Title)],
-//       usersData[i][tUsers.getCol(tUsers.email_Title)],
-//     );
-//     return false;
-//   }
-// }
-
+// нерабочее решение через класс
+// (так-то рабочее, но раз я использую таблички глобально во всем коде, и вообще
+// все методы глобальны на все файлы - то нет и смысла использовать класс)
 /**
  * Класс для регистрации пользователей в системе
  */
 class UserRegister {
   /**
-   * @param {Object} tUsers - Объект таблицы пользователей
-   * @param {Function} stringDate - Функция получения текущей даты в виде строки
+   * 
+   * @param {tUsers} tUsers - Таблица пользователей
+   * @param {Function} stringDate - Функция получения даты
    */
   constructor(tUsers, stringDate) {
     this.tUsers = tUsers;
     this.stringDate = stringDate;
+    tLob.use()
   }
 
   /**
@@ -140,15 +89,15 @@ class UserRegister {
     const i = row - 1; // Индекс в массиве данных
     
     // Обновляем ник и имя если они изменились
-    if (usersData[i][this.tUsers.getCol(this.tUsers.nick_Title)] !== nick) {
+    if (usersData[i][this.tUsers.getCol(this.tUsers.columns.nick)] !== nick) {
       this.tUsers.use()
-        .getRange(row, this.tUsers.getCol(this.tUsers.nick_Title) + 1)
+        .getRange(row, this.tUsers.getCol(this.tUsers.columns.nick) + 1)
         .setValue(nick);
     }
     
-    if (usersData[i][this.tUsers.getCol(this.tUsers.name_Title)] !== name) {
+    if (usersData[i][this.tUsers.getCol(this.tUsers.name)] !== name) {
       this.tUsers.use()
-        .getRange(row, this.tUsers.getCol(this.tUsers.name_Title) + 1)
+        .getRange(row, this.tUsers.getCol(this.tUsers.name) + 1)
         .setValue(name);
     }
 
@@ -158,10 +107,83 @@ class UserRegister {
       id,
       nick,
       name,
-      usersData[i][this.tUsers.getCol(this.tUsers.current_action_Title)],
-      usersData[i][this.tUsers.getCol(this.tUsers.role_Title)],
-      usersData[i][this.tUsers.getCol(this.tUsers.activity_Title)],
-      usersData[i][this.tUsers.getCol(this.tUsers.email_Title)]
+      usersData[i][this.tUsers.getCol(this.tUsers.current_action)],
+      usersData[i][this.tUsers.getCol(this.tUsers.role)],
+      usersData[i][this.tUsers.getCol(this.tUsers.activity)],
+      usersData[i][this.tUsers.getCol(this.tUsers.email)]
     ).setTable(this.tUsers);
   }
+}
+
+/**
+ * Класс для регистрации пользователей в системе
+ */
+const userRegister = {
+
+  check(id, nick, name) {
+    USERS_DATA = tUsers.use().getRange(tUsers.allRange).getValues();
+    const row = this._findUserRow(USERS_DATA, id);
+
+    if (row === -1) {
+      this._registerNewUser(id, nick, name);
+      return true;
+    } else {
+      this._updateExistingUser(row, id, nick, name, USERS_DATA);
+      return false;
+    }
+  },
+
+  _findUserRow(usersData, id) {
+    for (let i = 0; i < usersData.length; i++) {
+      if (usersData[i].includes(parseInt(id))) {
+        return i + 1; // +1 так как заголовки
+      }
+    }
+    return -1;
+  },
+
+  _registerNewUser(id, nick, name) {
+    USER = User.create(2, id, nick, name, null, null, null, null, true)
+      .setTable(tUsers);
+    
+    const userData = [
+        stringDate(),
+        USER.telegramID,
+        USER.nick,
+        USER.name,
+        USER.currentAction,
+        USER.role
+    ];
+
+    tUsers.use().appendRow(userData);
+  },
+
+  _updateExistingUser(row, id, nick, name, usersData) {
+    const i = row - 1; // Индекс в массиве данных
+    
+    // Обновляем ник и имя если они изменились
+    if (usersData[i][tUsers.getCol(tUsers.columns.nick)] !== nick) {
+      tUsers.use()
+        .getRange(row, tUsers.getCol(tUsers.columns.nick) + 1)
+        .setValue(nick);
+    }
+    
+    if (usersData[i][tUsers.getCol(tUsers.columns.name)] !== name) {
+      tUsers.use()
+        .getRange(row, tUsers.getCol(tUsers.columns.name) + 1)
+        .setValue(name);
+    }
+
+    // Создаем и возвращаем объект пользователя
+    USER = User.create(
+      row,
+      id,
+      nick,
+      name,
+      usersData[i][tUsers.getCol(tUsers.columns.currentAction)],
+      usersData[i][tUsers.getCol(tUsers.columns.role)],
+      usersData[i][tUsers.getCol(tUsers.columns.activity)],
+      usersData[i][tUsers.getCol(tUsers.columns.properties)]
+    ).setTable(tUsers);
+  },
 }

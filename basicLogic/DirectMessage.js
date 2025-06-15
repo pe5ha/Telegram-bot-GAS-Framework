@@ -1,23 +1,18 @@
-// версия 1
-
 function directMessage(){
-  // userRegister(user_id);
-
-  const userRegister = new UserRegister(tUsers, stringDate);
 
   // initial user checking
-  userRegister.register(user_id, nick, name);
+  userRegister.check(USER_ID, USER_NICK, name);
 
   
-  if (text.startsWith("/")) { 
-    text = text.replace(BotName,"");
+  if (MESSAGE_TEXT.startsWith("/")) { 
+    MESSAGE_TEXT = MESSAGE_TEXT.replace(BOT_USERNAME,"");
   }
   // start
-  if (text.startsWith("/start ")) { 
-    let payload = text.split(" ")[1];
+  if (MESSAGE_TEXT.startsWith("/start ")) { 
+    let payload = MESSAGE_TEXT.split(" ")[1];
     startCommand(payload);
   }
-  else if (text == "/start" || text == ("/start@"+BotName)) {
+  else if (MESSAGE_TEXT == "/start" || MESSAGE_TEXT == ("/start@"+BOT_USERNAME)) {
     startCommand();
   }
   
@@ -32,7 +27,7 @@ function directMessage(){
 
 
 function startCommand(payload=null){
-  if(user.isNewUser){ // если новый юзер
+  if(USER.isNewUser){ // если новый юзер
     // TODO новый юзер
     if(payload){ // реферал
       
@@ -46,8 +41,8 @@ function startCommand(payload=null){
   // deep link
   if(payload){ 
     let post_number = parseInt(payload);
-    ShowPost(chat_id, post_number);
-    setUserStage(user,post_number);
+    ShowPost(CHAT_ID, post_number);
+    setUserStage(USER,post_number);
   }
   // просто /start
   else{

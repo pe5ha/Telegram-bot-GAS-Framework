@@ -5,15 +5,15 @@
  * @param {String} text - Текст обновления в нужном для таблице виде
  */
  function logUpdate(action, text) {
-  if(doNotLog) return;
+  if(!LOG_INCOMING_ON) return;
   tLog.use().insertRowBefore(2);
-  let logdate = date ? stringDate(date*1000) : stringDate();
-  let logData = [logdate,user_id,nick,name,message_id,action, text];
+  let logdate = MESSAGE_DATE ? stringDate(MESSAGE_DATE*1000) : stringDate();
+  let logData = [logdate,USER_ID,USER_NICK,name,MESSAGE_ID,action, text];
   tLog.use().getRange(2,1,1,logData.length).setValues([logData]);
 }
 
 function logBotCopying(chat_id, message_id) {
-  if(doNotLog) return;
+  if(!LOG_BOT_SENDING_ON) return;
   tLog.use().insertRowBefore(2);
   let logData = [stringDate(),chat_id,"","",message_id, "Отправлена копия"];
   tLog.use().getRange(2,1,1,logData.length).setValues([logData]);
@@ -24,26 +24,13 @@ function logBotCopying(chat_id, message_id) {
  * @param {String} text - Текст обновления в нужном для таблице виде
  */
 function logBotSending(text) {
-  if(doNotLogBotSending) return;
+  if(!LOG_BOT_SENDING_ON) return;
   tLog.use().insertRowBefore(2);
-  let logdate = date ? stringDate(date*1000) : stringDate();
-  let logData = [[logdate,chat_id,nick,name,"","","",text]];
+  let logdate = MESSAGE_DATE ? stringDate(MESSAGE_DATE*1000) : stringDate();
+  let logData = [[logdate,CHAT_ID,USER_NICK,name,"","","",text]];
   // TODO chat_id заменить на имя ЧАТА (групповой чат или диалог)
   tLog.use().getRange(2,1,1,logData[0].length).setValues(logData);
 }
-
-function logDebug(e){
-  if(doNotLogDebug) return;
-  let tDebug = table.getSheetByName("Debug");
-  if(tDebug == null) { // если такого листа нет
-    table.insertSheet("Debug"); // то такой лист создаётся
-    tDebug = table.getSheetByName("Debug");
-  }
-  tDebug.getRange(1, 3).setValue(JSON.stringify(e, null, 5));
-  let contents = JSON.parse(e.postData.contents);
-  tDebug.getRange(1, 1).setValue(JSON.stringify(contents, null, 5));
-}
-
 
 
 
@@ -53,13 +40,13 @@ function logDebug(e){
  * @deprecated use logUpdate with text parameter instead 
  */
 function logButtons() {
-  let tLog = table.getSheetByName(LogSheet);
+  let tLog = TABLE.getSheetByName(LogSheet);
   let saveData = [];
   saveData.push(Utilities.formatDate(new Date(), "GMT+3", "dd.MM.yyyy HH:mm:ss"));
-  saveData.push(user_id);
-  saveData.push(nick);
+  saveData.push(USER_ID);
+  saveData.push(USER_NICK);
   saveData.push(name);
-  saveData.push("Кнопка: " + data);
+  saveData.push("Кнопка: " + BUTTON_DATA);
   tLog.insertRowBefore(2);
   tLog.getRange(2, 1, 1, saveData.length).setValues([saveData]);
 }
@@ -68,13 +55,13 @@ function logButtons() {
  * @deprecated use logUpdate with text parameter instead 
  */
 function logMessages() {
-  let tLog = table.getSheetByName(LogSheet);
+  let tLog = TABLE.getSheetByName(LogSheet);
   let saveData = [];
-  saveData.push(Utilities.formatDate(new Date(date * 1000), "GMT+3", "dd.MM.yyyy HH:mm:ss"));
-  saveData.push(user_id);
-  saveData.push(nick);
+  saveData.push(Utilities.formatDate(new Date(MESSAGE_DATE * 1000), "GMT+3", "dd.MM.yyyy HH:mm:ss"));
+  saveData.push(USER_ID);
+  saveData.push(USER_NICK);
   saveData.push(name);
-  saveData.push(text);
+  saveData.push(MESSAGE_TEXT);
   tLog.insertRowBefore(2);
   tLog.getRange(2, 1, 1, saveData.length).setValues([saveData]);
 }

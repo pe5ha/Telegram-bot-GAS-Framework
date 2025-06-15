@@ -3,10 +3,10 @@
 function groupChatMessage(message){
 
   // initial user checking
-  userRegister(user_id);
+  userRegister(USER_ID);
 
   // only start
-  if (text == "/start" || text == "/start@"+BotName) {
+  if (MESSAGE_TEXT == "/start" || MESSAGE_TEXT == "/start@"+BOT_USERNAME) {
     startCommand();
     return;
   }

@@ -12,22 +12,24 @@ let UserActions = {
   input_phone: "input_phone",
 }
 
-let AdminActions = {
+let AdminActions = { // TODO - пересмотреть
   input_post: "input_post",
   waiting_push: "waiting_push",
   input_push: "input_push",
   input_push_b: "input_push_b",
   input_helloMessage: "input_helloMessage",
+  edit_command: "edit_command",
+  input_command: "input_command",
+  edit_material: "edit_material",
+
 }
 
 let BotStrings = {
-  bot_start_message: "Привет!",
-
   start_message_admin: {
     text: "У вас роль <b>администратора</b> в боте.\nВам доступны следующие возможности:"+
-    "\n\n/addpost - добавить новый пост"+
-    "\n\n/push - отправить сообщение всем пользователям"+
-    "\n\n/push_button - отправить сообщение с кнопками"
+    "\n/commands - список команд в боте"+
+    "\n/editcommand - редактировать/добавить команду"+
+    "\n/sethello - изменить приветсвие (команду /start)"
   },
 
   question_instruction: {
@@ -151,43 +153,79 @@ let tUsersStage = {
 // tBotValues sheet structure
 let tBotValues = {
   sheetName: "BotValues",
-  key_Title: "переменная",
+  key_Title: "ключ",
   value_Title: "значение",
-  botName: {
-    title: "Имя бота:",
-    cell: "B2",
-    comment: "",
+  info_Title: "комментарий",
+  // botName: {
+  //   key: "BOT_USERNAME",
+  //   cell: "B2",
+  //   // default_value: "",
+  //   // comment: "никнейм бота в формате @username_bot ", 
+  // },
+  errorsChat: {
+    key: "ERRORS_LOG_CHAT",
+    cell: "B3",
+    // default_value: "",
+    // comment: "",
+  },
+  adminChatId: {
+    key: "ADMIN_CHAT_ID",
+    cell: "B4",
   },
   helloMessage: {
-    title: "Приветственное сообщение:",
-    cell: "B3",
-    cell_preview: "C3",
+    key: "START_MESSAGE",
+    cell: "B5",
+    cell_preview: "C5",
   },
   getColumnsOrder(){
     return [
-      [this.botName.title],	
-      [this.helloMessage.title],
+      [this.errorsChat.key],
+      [this.adminChatId.key],
+      [this.helloMessage.key]
     ];
   },
   use(){
-    let sheet = table.getSheetByName(this.sheetName);
+    let sheet = TABLE.getSheetByName(this.sheetName);
     if(!sheet){
-      sheet = table.insertSheet(this.sheetName);
-      let style = SpreadsheetApp.newTextStyle().setBold(true).setItalic(true).build();
-      sheet.getRange(1,1,1,2).setValues([[this.key_Title,this.value_Title]])
+      sheet = TABLE.insertSheet(this.sheetName);
+      let style = SpreadsheetApp.newTextStyle().setBold(true).build();
+      sheet.getRange(1,1,1,3).setValues([[this.key_Title,this.value_Title, this.info_Title]])
       .setTextStyle(style)
       .setHorizontalAlignment("center");
+      style = SpreadsheetApp.newTextStyle().setBold(true).build();
       sheet.getRange(2,1,this.getColumnsOrder().length,1).setValues(this.getColumnsOrder())
-      .setTextStyle(style)
-      .setHorizontalAlignment("center");
+      .setTextStyle(style);
+      sheet.setColumnWidths(1,3,200);
+      sheet.deleteRows(10,990);
+      sheet.deleteColumns(4,23);
     }
     return sheet;
   },
-  setBotName(botname){
-    this.use().getRange(this.botName.cell).setValue(botname);
+  setHelloMessageLink(chat_id,message_id,previewtext){
+    this.use().getRange(this.helloMessage.cell).setValue(JSON.stringify({chat_id, message_id}));
+    this.use().getRange(this.helloMessage.cell_preview).setValue(previewtext);
   },
-  getBotName(){
-    this.use().getRange(this.botName.cell).getValue();
+  getHelloMessageAdress(){
+    let messageLink = this.use().getRange(this.helloMessage.cell).getValue();
+    if(messageLink) messageLink = JSON.parse(messageLink);
+    else return null;
+    return messageLink;
+  },
+ 
+  setadminChatId(adminChatId){
+    this.use().getRange(this.adminChatId.cell).setValue(adminChatId);
+  },
+  getadminChatId(){
+    return this.use().getRange(this.adminChatId.cell).getValue();
+  },
+  // setBotName(botname){
+  //   this.use().getRange(this.botName.cell).setValue(botname);
+  // },
+  // getBotName(){
+  //   return this.use().getRange(this.botName.cell).getValue();
+  // },
+  getErrorsChat(){
+    return this.use().getRange(this.errorsChat.cell).getValue();
   },
   setHelloMessageLink(chat_id,message_id,previewtext){
     this.use().getRange(this.helloMessage.cell).setValue(JSON.stringify({chat_id, message_id}));
@@ -195,7 +233,5 @@ let tBotValues = {
   },
   getHelloMessage(){
     return this.use().getRange(this.helloMessage.cell).getValue();
-  }
-
-
+  },
 }

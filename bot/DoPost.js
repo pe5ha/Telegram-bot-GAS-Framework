@@ -1,7 +1,7 @@
 
 
 function debugDoPost(){
-  let tDebug = table.getSheetByName("Debug");
+  let tDebug = TABLE.getSheetByName("Debug");
   let e = tDebug.getRange('D1').getValue();
   doPost(JSON.parse(e));
   // d
@@ -12,18 +12,18 @@ function doPost(e) {
     entryPoint(e);
   }
   catch (err) {
-    botSendText(errorMessagesChat,err.stack);
+    logError(err.stack);
   }
 }
 
 function entryPoint(e){
 
   logDebug(e);
-  
-  let contents = JSON.parse(e.postData.contents);
 
   //initialization
-  user = new User();
+  botInitialization();
+  
+  let contents = JSON.parse(e.postData.contents);
 
   if (contents.message != null) {
     messageReceived(contents.message);

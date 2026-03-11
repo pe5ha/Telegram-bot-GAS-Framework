@@ -1,7 +1,7 @@
 function editMessageReceived(edited_message){
   CHAT_ID = edited_message.chat.id;
   USER_ID = edited_message.from.id;
-  name = edited_message.from.first_name + (edited_message.from.last_name ? " " + edited_message.from.last_name : "");
+  USER_NAME = edited_message.from.first_name + (edited_message.from.last_name ? " " + edited_message.from.last_name : "");
   USER_NICK = (edited_message.from.username ? "@" + edited_message.from.username : "");
   MESSAGE_DATE = edited_message.date;
   let edit_date = edited_message.edit_date;

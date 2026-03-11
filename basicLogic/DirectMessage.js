@@ -1,7 +1,7 @@
 function directMessage(){
 
   // initial user checking
-  userRegister.check(USER_ID, USER_NICK, name);
+  userRegister.check(USER_ID, USER_NICK, USER_NAME);
 
   
   if (MESSAGE_TEXT.startsWith("/")) { 

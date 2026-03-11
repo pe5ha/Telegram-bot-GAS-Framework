@@ -1,7 +1,7 @@
 function messageReceived(message) {
   CHAT_ID = message.chat.id;
   USER_ID = message.from.id;
-  name = message.from.first_name + (message.from.last_name ? " " + message.from.last_name : "");
+  USER_NAME = message.from.first_name + (message.from.last_name ? " " + message.from.last_name : "");
   USER_NICK = (message.from.username ? "@" + message.from.username : "");
   MESSAGE_DATE = message.date;
   

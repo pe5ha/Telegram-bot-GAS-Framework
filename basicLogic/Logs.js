@@ -8,7 +8,7 @@
   if(!LOG_INCOMING_ON) return;
   tLog.use().insertRowBefore(2);
   let logdate = MESSAGE_DATE ? stringDate(MESSAGE_DATE*1000) : stringDate();
-  let logData = [logdate,USER_ID,USER_NICK,name,MESSAGE_ID,action, text];
+  let logData = [logdate,USER_ID,USER_NICK,USER_NAME,MESSAGE_ID,action, text];
   tLog.use().getRange(2,1,1,logData.length).setValues([logData]);
 }
 
@@ -27,7 +27,7 @@ function logBotSending(text) {
   if(!LOG_BOT_SENDING_ON) return;
   tLog.use().insertRowBefore(2);
   let logdate = MESSAGE_DATE ? stringDate(MESSAGE_DATE*1000) : stringDate();
-  let logData = [[logdate,CHAT_ID,USER_NICK,name,"","","",text]];
+  let logData = [[logdate,CHAT_ID,USER_NICK,USER_NAME,"","","",text]];
   // TODO chat_id заменить на имя ЧАТА (групповой чат или диалог)
   tLog.use().getRange(2,1,1,logData[0].length).setValues(logData);
 }
@@ -45,7 +45,7 @@ function logButtons() {
   saveData.push(Utilities.formatDate(new Date(), "GMT+3", "dd.MM.yyyy HH:mm:ss"));
   saveData.push(USER_ID);
   saveData.push(USER_NICK);
-  saveData.push(name);
+  saveData.push(USER_NAME);
   saveData.push("Кнопка: " + BUTTON_DATA);
   tLog.insertRowBefore(2);
   tLog.getRange(2, 1, 1, saveData.length).setValues([saveData]);
@@ -60,7 +60,7 @@ function logMessages() {
   saveData.push(Utilities.formatDate(new Date(MESSAGE_DATE * 1000), "GMT+3", "dd.MM.yyyy HH:mm:ss"));
   saveData.push(USER_ID);
   saveData.push(USER_NICK);
-  saveData.push(name);
+  saveData.push(USER_NAME);
   saveData.push(MESSAGE_TEXT);
   tLog.insertRowBefore(2);
   tLog.getRange(2, 1, 1, saveData.length).setValues([saveData]);

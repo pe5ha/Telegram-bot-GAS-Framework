@@ -15,7 +15,7 @@
 //    * Пример события
 //    */
 //   if(MESSAGE_TEXT=="Привет"){
-//     botSendMessage(CHAT_ID,"Привет, " + name);
+//     botSendMessage(CHAT_ID,"Привет, " + USER_NAME);
 //   }
 
 // }

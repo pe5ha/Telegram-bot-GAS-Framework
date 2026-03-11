@@ -27,9 +27,7 @@ const userRegister = {
   },
 
   _registerNewUser(id, nick, name) {
-    USER = User.create(2, id, nick, name, null, null, null, null, true)
-      .setTable(tUsers);
-    
+    USER = User.create(-1, id, nick, name, null, null, null, null, true).setTable(tUsers);
     const userData = [
         stringDate(),
         USER.telegramID,
@@ -40,6 +38,8 @@ const userRegister = {
     ];
 
     tUsers.use().appendRow(userData);
+    let newRowNumber = tUsers.use().getLastRow();
+    USER.rowInTable = newRowNumber;
   },
 
   _updateExistingUser(row, id, nick, name, usersData) {

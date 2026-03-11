@@ -1,5 +1,3 @@
-// версия 1
-
 function messageReceived(message) {
   CHAT_ID = message.chat.id;
   USER_ID = message.from.id;

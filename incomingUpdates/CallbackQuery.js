@@ -1,5 +1,3 @@
-// версия 1
-
 function callbackQueryReceived(callback_query) {
   USER_ID = callback_query.from.id;
   CHAT_ID = callback_query.message.chat.id;

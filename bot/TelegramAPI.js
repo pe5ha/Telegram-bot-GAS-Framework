@@ -47,7 +47,7 @@ sendDocument(token, chat_id, text, blob) {
   return sendData(token,data);
 },
 
-copyMessage(token,chat_id,from_chat_id,message_id,keyboard=null){
+copyMessage(token,chat_id,from_chat_id,message_id,keyboard=null,protect_content=false){
   if(keyboard!=null) keyboard = JSON.stringify(keyboard);
   let data = {
     method: "post",
@@ -57,6 +57,7 @@ copyMessage(token,chat_id,from_chat_id,message_id,keyboard=null){
       from_chat_id: String(from_chat_id),
       message_id: message_id,
       reply_markup: keyboard,
+      protect_content: protect_content
     },
     muteHttpExceptions: true
   };

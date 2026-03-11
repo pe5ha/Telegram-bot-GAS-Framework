@@ -40,9 +40,7 @@ function startCommand(payload=null){
 
   // deep link
   if(payload){ 
-    let post_number = parseInt(payload);
-    ShowPost(CHAT_ID, post_number);
-    setUserStage(USER,post_number);
+    
   }
   // просто /start
   else{

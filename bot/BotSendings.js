@@ -73,9 +73,9 @@ function botSendTextV2(chat_id, message){
   afterSending(telegramResp);
 }
 
-function botCopyMessage(chat_id,from_chat_id,message_id,keyboard=null){
+function botCopyMessage(chat_id,from_chat_id,message_id,keyboard=null,protect_content=false){
   if(!keyboard) keyboard = { remove_keyboard: true };
 
-  let telegramResp = TelegramAPI.copyMessage(TOKEN,chat_id,from_chat_id,message_id,keyboard);
+  let telegramResp = TelegramAPI.copyMessage(TOKEN,chat_id,from_chat_id,message_id,keyboard,protect_content);
   return afterCopy(telegramResp,chat_id);
 }

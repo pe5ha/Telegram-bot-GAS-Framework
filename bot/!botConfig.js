@@ -47,6 +47,10 @@ let TABLE = SpreadsheetApp.openById(SpreadsheetID);
 function getToken(){return TOKEN;}
 function getTableId(){return TABLE.getId();}  
 
+
+/**
+ * Выполняется при каждом запуске бота, для инициализации глобальных значений.
+ */
 function botInitialization(){
   USER = new User();
 

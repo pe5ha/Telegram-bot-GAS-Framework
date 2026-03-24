@@ -1,6 +1,3 @@
-
-// =============== рабочий код ↓
-
 const TableMethods = {
   getColumnsOrder() {
     return this.columnsOrder;

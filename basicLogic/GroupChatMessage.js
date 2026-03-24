@@ -1,5 +1,3 @@
-// версия 0.1
-
 function groupChatMessage(message){
 
   // initial user checking

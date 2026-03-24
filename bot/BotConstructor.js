@@ -37,3 +37,11 @@ let BotStrings = {
     +"\nВ сообщении обязательно должен быть вопросительный знак '?' 😊\n",
   }
 }
+
+// Меню с командами в боте. Команда /start почти всегда нужна для перезапуска бота/вызова меню. 
+function setMyCommands(){
+  let commands = [
+    {command: "start", description: "Главное меню"},
+  ];
+  console.log(TelegramAPI.setMyCommands(TOKEN,commands));
+}

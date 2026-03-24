@@ -1,3 +1,8 @@
+/**
+ * Некоторые значения относящиеся не к пользователям, а к самому боту, Bot Values
+ * хранятся не в таблице, а в сервисе Свойств скрипта.  
+ */
+
 const BotCache = {
   _props: PropertiesService.getScriptProperties(),
 

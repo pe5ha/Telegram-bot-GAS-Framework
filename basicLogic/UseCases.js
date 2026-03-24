@@ -1,3 +1,4 @@
+// код UseCases вынесен вне фреймворка, так как это уже бизнес логика.
 
 // /**
 //  *   Bot use cases detecting (User Roles and Current actions)

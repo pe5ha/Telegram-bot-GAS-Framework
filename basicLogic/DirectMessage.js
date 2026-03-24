@@ -32,8 +32,8 @@ function startCommand(payload=null){
     if(payload){ // реферал
       
     }
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! eудалить потом
-    // if(payload=="giveadmin234324"){
+    // ну например можно запускать особую логику по особым ссылкам-ключам
+    // if(payload=="giveadmin1234"){
     //   setUserRole(user,UserRoles.admin);
     // }
   }

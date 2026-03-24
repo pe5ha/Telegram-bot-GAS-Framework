@@ -16,7 +16,7 @@ function afterSending(telegramResp){
   else{ // ошибка отправки
 
     // !! delete later
-    botSendText(errorMessagesChat,JSON.stringify(telegramResp));
+    botSendMessage(errorMessagesChat,JSON.stringify(telegramResp));
 
     if(telegramResp.error_code==400){
       // {"ok":false,"error_code":400,"description":"Bad Request: chat not found"}
@@ -29,6 +29,13 @@ function afterSending(telegramResp){
     }
     return false;
   }
+}
+
+function botCopyMessage(chat_id,from_chat_id,message_id,keyboard=null,protect_content=false){
+  if(!keyboard) keyboard = { remove_keyboard: true };
+
+  let telegramResp = TelegramAPI.copyMessage(TOKEN,chat_id,from_chat_id,message_id,keyboard,protect_content);
+  return afterCopy(telegramResp,chat_id);
 }
 
 function afterCopy(telegramResp,chat_id){
@@ -50,32 +57,8 @@ function afterCopy(telegramResp,chat_id){
     }
     else {
       // !! delete later
-      botSendText(errorMessagesChat,JSON.stringify(telegramResp));
+      botSendMessage(errorMessagesChat,JSON.stringify(telegramResp));
     }
     return false;
   }
-}
-
-
-
-
-/**
- * 
- * @depracated - Зачем если есть метод botSendMessage() ?
- */
-function botSendText(chat_id, textToSend){
-  let telegramResp = TelegramAPI.sendMessage(TOKEN, chat_id, textToSend);
-  afterSending(telegramResp);
-}
-
-function botSendTextV2(chat_id, message){
-  let telegramResp = TelegramAPI.sendMessageV2(TOKEN, chat_id, message);
-  afterSending(telegramResp);
-}
-
-function botCopyMessage(chat_id,from_chat_id,message_id,keyboard=null,protect_content=false){
-  if(!keyboard) keyboard = { remove_keyboard: true };
-
-  let telegramResp = TelegramAPI.copyMessage(TOKEN,chat_id,from_chat_id,message_id,keyboard,protect_content);
-  return afterCopy(telegramResp,chat_id);
 }

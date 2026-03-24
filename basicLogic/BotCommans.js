@@ -1,5 +1,5 @@
 
-// TODO объединить в общий интерфейс c checkForCommand. Аргумент - nf,kbxrf
+// TODO объединить в общий интерфейс c checkForCommand. Аргумент - табличка
 function checkForCommandMaterial(text){
   let commandsArray = tMaterials.use().getRange("A:B").getValues();
   for(let i=1;i<commandsArray.length;i++){
@@ -11,7 +11,7 @@ function checkForCommandMaterial(text){
   return null;
 }
 
-// TODO объединить в общий интерфейс c checkForCommand. Аргумент - nf,kbxrf4
+// TODO объединить в общий интерфейс c checkForCommand. Аргумент - табличка
 /**
  * 
  * @param {*} tableName 

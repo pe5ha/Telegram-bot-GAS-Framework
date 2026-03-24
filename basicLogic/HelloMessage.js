@@ -1,3 +1,7 @@
+/**
+ * Ответ бота на главную команду /start
+ */
+
 function HelloMessasge(isUpdate=false){
 
   if(USER.role==UserRoles.admin) botSendMessage(CHAT_ID,BotStrings.start_message_admin.text);

@@ -67,7 +67,7 @@ let tLog = Object.assign({
   }, TableMethods);
 
 let tBotCommands =  Object.assign({
-  sheetName: "BotCommands",
+  sheetName: "Главное меню",
   columns: {
     command_Title: "Команда",
     link_Title: "Ссылка на сообщение",

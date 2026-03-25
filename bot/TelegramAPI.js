@@ -125,7 +125,7 @@ deleteMessage(token,chat_id,message_id){
 * @param  {Boolean} disableWebPagePreview Disables link previews for links in this message (optional).
 * @returns {resp} Telegram response
 */
-sendMessage(token,chat_id,txt,keyboard=null,parsemode="HTML",disableWebPagePreview=false){
+sendMessage(token,chat_id,txt,keyboard=null,parsemode="",disableWebPagePreview=false){
   // если без кнопок сообщение то клавиатура null
   if(keyboard!=null) keyboard = JSON.stringify(keyboard);
 
@@ -162,7 +162,8 @@ forwardMessage(token,chat_id,from_chat_id,message_id){
 function sendData(token,data){
   try{
     let resp = UrlFetchApp.fetch("https://api.telegram.org/bot"+token+"/", data);
-    return JSON.parse(resp);
+    let result = JSON.parse(resp);
+    return result;
   }
   catch(e){
     Logger.log(e);

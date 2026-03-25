@@ -1,7 +1,12 @@
-
-function stringDate(timestamp=null){
-  if(timestamp) return Utilities.formatDate(new Date(timestamp), "GMT+3", "dd.MM.yyyy HH:mm:ss");
-  else return Utilities.formatDate(new Date(), "GMT+3", "dd.MM.yyyy HH:mm:ss");
+function stringDate(date=null, dateOnly=false, gmt="GMT+3"){
+  if(dateOnly){
+    if(date) return Utilities.formatDate(date, gmt, "dd.MM.yyyy");
+    else return Utilities.formatDate(new Date(), gmt, "dd.MM.yyyy");
+  }
+  else {
+    if(date) return Utilities.formatDate(date, gmt, "dd.MM.yyyy HH:mm:ss");
+    else return Utilities.formatDate(new Date(), gmt, "dd.MM.yyyy HH:mm:ss");
+  }
 }
 
 /**

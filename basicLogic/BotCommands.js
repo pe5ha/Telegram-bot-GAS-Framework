@@ -11,7 +11,6 @@ function checkForCommandMaterial(text){
   return null;
 }
 
-// TODO объединить в общий интерфейс c checkForCommand. Аргумент - табличка
 /**
  * 
  * @param {*} tableName 
@@ -21,11 +20,8 @@ function checkForCommandMaterial(text){
 function getCommandValues(sheetName, command){
   let sheet = TABLE.getSheetByName(sheetName);
   let commandsArray = sheet.getDataRange().getRichTextValues();
-  let sheetId;
   for(let i=1;i<commandsArray.length;i++){
     if(commandsArray[i][0].getText() == "") break;
-    // let linkURL = commandsArray[i][1].getLinkUrl();
-    // if()
     if(String(commandsArray[i][0].getText()).trim() == command){
       return commandsArray[i];
     }
@@ -36,6 +32,7 @@ function getCommandValues(sheetName, command){
 function executeCommand(sheetName, command){
   let isDone = false;
   let commandValues = getCommandValues(sheetName, command);
+  let keyboard = subMenuKeyboard(sheetName);
   if(commandValues == null) return;
   for(let i = 1; i < commandValues.length; i++) {
     const richText = commandValues[i];
@@ -43,26 +40,31 @@ function executeCommand(sheetName, command){
     if(text == "") break;
     let linkURL = richText.getLinkUrl();
     let sheetId;
+    const postAdressPattern = /^\{"chat_id":-?\d+,"message_id":\d+\}$/;
     if(linkURL){
       if(String(linkURL).startsWith("#gid=")){
         sheetId = parseInt(String(linkURL).split("=")[1]);
         subMenuResponse(sheetId, text);
         isDone = true;
       }
-      else{} // здесь можно просто ссылка на куда-то
+      else{} // TODO здесь возможно просто ссылка на куда-то
     }
-    else{
+    else if (postAdressPattern.test(text)){
       let postAdress = JSON.parse(text);
-      postResponse(postAdress);
+      postResponse(postAdress, keyboard);
+      isDone = true;
+    }
+    else {
+      botSendMessage(CHAT_ID, text, keyboard);
       isDone = true;
     }
   }
   return isDone;
 }
 
-function postResponse(postAdress){
+function postResponse(postAdress, keyboard=MAIN_KEYBOARD){
   if(postAdress.chat_id && postAdress.message_id){
-    botCopyMessage(CHAT_ID, postAdress.chat_id, postAdress.message_id, MAIN_KEYBOARD, true);
+    botCopyMessage(CHAT_ID, postAdress.chat_id, postAdress.message_id, keyboard);
   } 
 }
 
@@ -70,20 +72,42 @@ function postResponse(postAdress){
  * 
  * @param {number} sheetId - sheet with commands and responses in columns A:B
  */
-function subMenuResponse(sheetId, menuTitle){
+function subMenuResponse(sheetId, text){
   let sheet = TABLE.getSheetById(sheetId);
   let commandsArray = sheet.getRange("A:B").getValues();
   let keyboard = {
-    keyboard: [["Назад"]],
+    keyboard: [],
     resize_keyboard: true,
   };
   for(let i=1;i<commandsArray.length;i++){
     if(commandsArray[i][0] == "") break;
     keyboard.keyboard.push([commandsArray[i][0]]);
   }
-  botSendMessage(CHAT_ID,menuTitle,keyboard);
+
+  const postAdressPattern = /^\{"chat_id":-?\d+,"message_id":\d+\}$/;
+  if (postAdressPattern.test(text)){
+    let postAdress = JSON.parse(text);
+    postResponse(postAdress, keyboard);
+  }
+  else {
+    botSendMessage(CHAT_ID, text, keyboard);
+  }
+  USER.setCurrentAction("menu="+sheet.getSheetName());
 }
 
+function subMenuKeyboard(sheetName){
+  let sheet = TABLE.getSheetByName(sheetName);
+  let commandsArray = sheet.getRange("A:B").getValues();
+  let keyboard = {
+    keyboard: [],
+    resize_keyboard: true,
+  };
+  for(let i=1;i<commandsArray.length;i++){
+    if(commandsArray[i][0] == "") break;
+    keyboard.keyboard.push([commandsArray[i][0]]);
+  }
+  return keyboard;
+}
 
 function commandsListForAdmin(){
   let commandsArray = tBotCommands.getCommands();

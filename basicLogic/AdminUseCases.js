@@ -4,8 +4,6 @@
 
 function adminUseCases(){
 
-  // TODO - пересмотреть
-
   let isAdminAction = true;
   
   if(MESSAGE_TEXT=="/cancel"){

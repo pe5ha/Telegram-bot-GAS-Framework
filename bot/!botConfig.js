@@ -31,7 +31,7 @@ let USER_PHONE;
 let USERS_DATA; 
 
 // globalUser
-let USER;
+let USER = new User();
 
 // bot token
 let TOKEN = PropertiesService.getScriptProperties().getProperty('BOT_TOKEN');
@@ -52,22 +52,10 @@ function getTableId(){return TABLE.getId();}
  * Выполняется при каждом запуске бота, для инициализации глобальных значений.
  */
 function botInitialization(){
-  USER = new User();
+  // USER = new User();
 
   ERRORS_LOG_CHAT = PropertiesService.getScriptProperties().getProperty('ERRORS_CHAT');
   BOT_USERNAME = PropertiesService.getScriptProperties().getProperty('BOT_USERNAME');
 
-  MAIN_KEYBOARD = {
-    keyboard: [
-    ],
-    resize_keyboard: true,
-    is_persistent: true,
-
-  };
-
-  let commandsArray = tBotCommands.getAllRangeValues();
-  for(let i=1;i<commandsArray.length;i++){
-    if(commandsArray[i][0] == "") break;
-    MAIN_KEYBOARD.keyboard.push([commandsArray[i][0]]);
-  }
+  MAIN_KEYBOARD = subMenuKeyboard(TABLE.getSheetByName(tBotCommands.sheetName).getSheetId());
 }

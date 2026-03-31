@@ -44,10 +44,11 @@ const tUsers = Object.assign({
     name: "Имя",
     currentAction: "Действие",
     role: "Роль",
+    menuLevel: "Уровень меню",
     activity: "Активность",
     properties: "Свойства"
   },
-  columnsOrder: ["Дата рег.","Телеграм ID","Ник","Имя","Действие","Роль","Активность","Свойства"],
+  columnsOrder: ["Дата рег.","Телеграм ID","Ник","Имя","Действие","Роль","Уровень меню","Активность","Свойства"],
   allRange: "A:H"
 }, TableMethods);
 
@@ -69,12 +70,12 @@ let tLog = Object.assign({
 let tBotCommands =  Object.assign({
   sheetName: "Главное меню",
   columns: {
-    command_Title: "Команда",
-    link_Title: "Ссылка на сообщение",
-    preview_Title: "Предпросмотр",
+    row_Title: "Строка",
+    command_Title: "Кнопка",
+    link_Title: "Ответ"
   },
-  columnsOrder: ["Команда","Ссылка на сообщение","Предпросмотр"],
-  allRange: "A:B"
+  columnsOrder: ["Строка","Кнопка","Ответ"],
+  allRange: "A:C"
   }, TableMethods);
 
   

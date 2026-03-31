@@ -1,10 +1,11 @@
 class User {
-  constructor(rowInTable, telegramID, nick, name, currentAction = null, role = null, activity = null, properties = null, isNewUser = false) {
+  constructor(rowInTable, telegramID, nick, name, currentAction = null, role = null, menuLevel = null, activity = null, properties = null, isNewUser = false) {
     this.telegramID = telegramID;
     this.nick = nick;
     this.name = name;
     this.currentAction = currentAction;
     this.role = role;
+    this.menuLevel = menuLevel;
     this.rowInTable = rowInTable;
     this.isNewUser = isNewUser;
     this.activity = activity;
@@ -25,6 +26,17 @@ class User {
     const col = tUsers.getCol(tUsers.columns.currentAction) + 1;
     this._updateCellValue(this.rowInTable, col, currentAction);
     this.currentAction = currentAction;
+    
+    return this;
+  }
+
+  // Установка текущего уровня меню
+  setMenuLevel(menuLevel) {
+    this._validateTable();
+    
+    const col = tUsers.getCol(tUsers.columns.menuLevel) + 1;
+    this._updateCellValue(this.rowInTable, col, menuLevel);
+    this.menuLevel = menuLevel;
     
     return this;
   }
@@ -69,8 +81,8 @@ class User {
   }
 
   // Статический метод создания пользователя
-  static create(rowInTable, telegramID, nick, name, currentAction = null, role = null, activity = null, email = null, isNewUser = false) {
-    return new User(rowInTable, telegramID, nick, name, currentAction, role, activity, email, isNewUser);
+  static create(rowInTable, telegramID, nick, name, currentAction = null, role = null, menuLevel = null, activity = null, properties = null, isNewUser = false) {
+    return new User(rowInTable, telegramID, nick, name, currentAction, role, menuLevel, activity, properties, isNewUser);
   }
 
   // Обновление данных пользователя

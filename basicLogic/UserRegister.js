@@ -27,7 +27,7 @@ const userRegister = {
   },
 
   _registerNewUser(id, nick, name) {
-    USER = User.create(-1, id, nick, name, null, null, null, null, true).setTable(tUsers);
+    USER = User.create(-1, id, nick, name, null, null, null, null, null, true).setTable(tUsers);
     const userData = [
         stringDate(),
         USER.telegramID,
@@ -66,6 +66,7 @@ const userRegister = {
       name,
       usersData[i][tUsers.getCol(tUsers.columns.currentAction)],
       usersData[i][tUsers.getCol(tUsers.columns.role)],
+      usersData[i][tUsers.getCol(tUsers.columns.menuLevel)],
       usersData[i][tUsers.getCol(tUsers.columns.activity)],
       usersData[i][tUsers.getCol(tUsers.columns.properties)]
     ).setTable(tUsers);

@@ -15,8 +15,7 @@ function afterSending(telegramResp){
   }
   else{ // ошибка отправки
 
-    // !! delete later
-    botSendMessage(errorMessagesChat,JSON.stringify(telegramResp));
+    botSendMessage(ERRORS_LOG_CHAT,JSON.stringify(telegramResp));
 
     if(telegramResp.error_code==400){
       // {"ok":false,"error_code":400,"description":"Bad Request: chat not found"}
@@ -56,8 +55,7 @@ function afterCopy(telegramResp,chat_id){
       // TODO
     }
     else {
-      // !! delete later
-      botSendMessage(errorMessagesChat,JSON.stringify(telegramResp));
+      botSendMessage(ERRORS_LOG_CHAT,JSON.stringify(telegramResp));
     }
     return false;
   }

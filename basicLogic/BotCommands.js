@@ -1,14 +1,15 @@
+function checkForCommand(){
 
-// TODO объединить в общий интерфейс c checkForCommand. Аргумент - табличка
-function checkForCommandMaterial(text){
-  let commandsArray = tMaterials.use().getRange("A:B").getValues();
-  for(let i=1;i<commandsArray.length;i++){
-    if(commandsArray[i][0] == "") break;
-    if(String(commandsArray[i][0]).trim() == text){
-      return commandsArray[i][1];
-    }
+  if(USER.menuLevel){
+    let sheetId = USER.menuLevel;
+    executeCommand(sheetId, MESSAGE_TEXT);
   }
-  return null;
+  else {
+    let sheetId = TABLE.getSheetByName(tBotCommands.sheetName).getSheetId();
+    executeCommand(sheetId, MESSAGE_TEXT);
+  }
+
+  // TODO вынести хранение уровня меню в отдельную переменную пользователя.
 }
 
 /**
@@ -17,24 +18,24 @@ function checkForCommandMaterial(text){
  * @param {*} command 
  * @returns RichTextValue or Null
  */
-function getCommandValues(sheetName, command){
-  let sheet = TABLE.getSheetByName(sheetName);
+function getCommandValues(sheetId, command){
+  let sheet = TABLE.getSheetById(sheetId);
   let commandsArray = sheet.getDataRange().getRichTextValues();
   for(let i=1;i<commandsArray.length;i++){
-    if(commandsArray[i][0].getText() == "") break;
-    if(String(commandsArray[i][0].getText()).trim() == command){
+    if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)].getText() == "") break;
+    if(String(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)].getText()).trim() == command){
       return commandsArray[i];
     }
   }
   return null;
 }
 
-function executeCommand(sheetName, command){
+function executeCommand(sheetId, command){
   let isDone = false;
-  let commandValues = getCommandValues(sheetName, command);
-  let keyboard = subMenuKeyboard(sheetName);
+  let commandValues = getCommandValues(sheetId, command);
+  let keyboard = subMenuKeyboard(sheetId);
   if(commandValues == null) return;
-  for(let i = 1; i < commandValues.length; i++) {
+  for(let i = 2; i < commandValues.length; i++) {
     const richText = commandValues[i];
     let text = richText.getText(); 
     if(text == "") break;
@@ -74,15 +75,7 @@ function postResponse(postAdress, keyboard=MAIN_KEYBOARD){
  */
 function subMenuResponse(sheetId, text){
   let sheet = TABLE.getSheetById(sheetId);
-  let commandsArray = sheet.getRange("A:B").getValues();
-  let keyboard = {
-    keyboard: [],
-    resize_keyboard: true,
-  };
-  for(let i=1;i<commandsArray.length;i++){
-    if(commandsArray[i][0] == "") break;
-    keyboard.keyboard.push([commandsArray[i][0]]);
-  }
+  let keyboard = subMenuKeyboard(sheetId);
 
   const postAdressPattern = /^\{"chat_id":-?\d+,"message_id":\d+\}$/;
   if (postAdressPattern.test(text)){
@@ -92,19 +85,28 @@ function subMenuResponse(sheetId, text){
   else {
     botSendMessage(CHAT_ID, text, keyboard);
   }
-  USER.setCurrentAction("menu="+sheet.getSheetName());
+  USER.setMenuLevel(sheet.getSheetId());
 }
 
-function subMenuKeyboard(sheetName){
-  let sheet = TABLE.getSheetByName(sheetName);
-  let commandsArray = sheet.getRange("A:B").getValues();
+function subMenuKeyboard(sheetId){
+  let sheet = TABLE.getSheetById(sheetId);
+  let commandsArray = sheet.getDataRange().getValues();
   let keyboard = {
     keyboard: [],
     resize_keyboard: true,
   };
+  let row = -1;
   for(let i=1;i<commandsArray.length;i++){
-    if(commandsArray[i][0] == "") break;
-    keyboard.keyboard.push([commandsArray[i][0]]);
+    if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)] == "") break;
+    let commandRow = commandsArray[i][tBotCommands.getCol(tBotCommands.columns.row_Title)];
+    if(commandRow == "") {
+      keyboard.keyboard.push([]);
+    }
+    else if(row != commandRow ){
+      keyboard.keyboard.push([]);
+      row = commandRow;
+    }
+    keyboard.keyboard[keyboard.keyboard.length-1].push(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)]);
   }
   return keyboard;
 }
@@ -113,8 +115,8 @@ function commandsListForAdmin(){
   let commandsArray = tBotCommands.getCommands();
   let commands = "";
   for(let i=1;i<commandsArray.length;i++){
-    if(commandsArray[i][0] == "") break;
-    commands+=commandsArray[i][0]+"\n";
+    if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)] == "") break;
+    commands+=commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)]+"\n";
   }
   return commands;
 }
@@ -125,8 +127,8 @@ function setBotCommand(sheetId, command, postAdress, index=0){
   let commandsArray = sheet.getDataRange().getValues();
   let i; 
   for(i=1;i<commandsArray.length;i++){
-    if(commandsArray[i][0] == "") break;
-    if(commandsArray[i][0] == command){
+    if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)] == "") break;
+    if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)] == command){
       let row = i+1;
       if(index==0){
         let lastCol = sheet.getLastColumn();
@@ -146,8 +148,8 @@ function setBotMaterial(spicker, postAdress){
   let commandsArray = tMaterials.use().getRange("A:A").getValues();
   let i; 
   for(i=1;i<commandsArray.length;i++){
-    if(commandsArray[i][0] == "") break;
-    if(commandsArray[i][0] == spicker){
+    if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)] == "") break;
+    if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)] == spicker){
       let row = i+1;
       tMaterials.use().getRange(row,2).setValue(JSON.stringify(postAdress));
       return;

@@ -8,11 +8,13 @@ function messageReceived(message) {
   MESSAGE_ID = message.message_id;
 
   if(message.text) MESSAGE_TEXT = message.text;
-  else if(message.video) MESSAGE_TEXT = message.caption;
-  else if(message.photo) MESSAGE_TEXT = message.caption;
-  else if(message.audio) MESSAGE_TEXT = message.caption;
-  else if(message.document) MESSAGE_TEXT = message.caption;
-  else if(message.voice) MESSAGE_TEXT = message.caption;
+  else if(message.video) MESSAGE_TEXT = message.caption ? message.caption : "(видео)";
+  else if(message.photo) MESSAGE_TEXT = message.caption ? message.caption : "(фото)";
+  else if(message.audio) MESSAGE_TEXT = message.caption ? message.caption : "(аудио)";
+  else if(message.document) MESSAGE_TEXT = message.caption ? message.caption : "(документ)";
+  else if(message.voice) MESSAGE_TEXT = "(голосовое сообщение)";
+  else if(message.video_note) MESSAGE_TEXT = "(видеосообщение)";
+  else if(message.sticker) MESSAGE_TEXT = message.sticker.emoji + " (стикер)";
   if(!MESSAGE_TEXT) MESSAGE_TEXT = "";
   if(message.contact) USER_PHONE = message.contact.phone_number;
 

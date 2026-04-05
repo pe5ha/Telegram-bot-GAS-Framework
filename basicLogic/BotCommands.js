@@ -8,13 +8,11 @@ function checkForCommand(){
     let sheetId = TABLE.getSheetByName(tBotCommands.sheetName).getSheetId();
     executeCommand(sheetId, MESSAGE_TEXT);
   }
-
-  // TODO вынести хранение уровня меню в отдельную переменную пользователя.
 }
 
 /**
  * 
- * @param {*} tableName 
+ * @param {*} sheetId 
  * @param {*} command 
  * @returns RichTextValue or Null
  */
@@ -89,6 +87,7 @@ function subMenuResponse(sheetId, text){
 }
 
 function subMenuKeyboard(sheetId){
+  if(!sheetId) sheetId = tBotCommands.getSheetId();
   let sheet = TABLE.getSheetById(sheetId);
   let commandsArray = sheet.getDataRange().getValues();
   let keyboard = {
@@ -108,20 +107,19 @@ function subMenuKeyboard(sheetId){
     }
     keyboard.keyboard[keyboard.keyboard.length-1].push(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)]);
   }
+
+  if(USER.role == UserRoles.admin && USER.currentAction == AdminActions.manage_commands){
+    keyboard.keyboard.push([
+      {text: "Добавить команду", style: "success"},
+      {text: "Редактировать", style: "primary"},
+      {text: "Удалить команду", style: "danger"},
+    ],[{text: "Создать новый раздел", style: "primary"}]);
+  }
+
   return keyboard;
 }
 
-function commandsListForAdmin(){
-  let commandsArray = tBotCommands.getCommands();
-  let commands = "";
-  for(let i=1;i<commandsArray.length;i++){
-    if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)] == "") break;
-    commands+=commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)]+"\n";
-  }
-  return commands;
-}
-
-function setBotCommand(sheetId, command, postAdress, index=0){
+function setBotCommand(sheetId, command, postAdress, preview, index=0){
   let sheet = TABLE.getSheetById(sheetId);
   if(!sheet) return;
   let commandsArray = sheet.getDataRange().getValues();
@@ -132,29 +130,41 @@ function setBotCommand(sheetId, command, postAdress, index=0){
       let row = i+1;
       if(index==0){
         let lastCol = sheet.getLastColumn();
-        sheet.getRange(row,2,1,lastCol-1).clear();
+        sheet.getRange(row,3,1,lastCol-1).clear();
       }
-      sheet.getRange(row,2+index).setValue(JSON.stringify(postAdress));
+      sheet.getRange(row,3+index).setValue(JSON.stringify(postAdress));
+      sheet.getRange(row,3+index).setNote(preview);
       return index+1;
     }
   }
-  sheet.insertRowAfter(i);
-  sheet.getRange(i+1,1,1,2).setValues([[command,JSON.stringify(postAdress)]]);
+  if(i>1) sheet.insertRowAfter(i);
+  else sheet.insertRowBefore(i+1);
+  sheet.getRange(i+1,2,1,2).setValues([[command,JSON.stringify(postAdress)]]);
+  sheet.getRange(i+1,3).setNote(preview);
   return 1;
 }
 
-
-function setBotMaterial(spicker, postAdress){
-  let commandsArray = tMaterials.use().getRange("A:A").getValues();
+function deleteBotCommand(sheetId, command){
+  let sheet = TABLE.getSheetById(sheetId);
+  if(!sheet) return;
+  let commandsArray = sheet.getDataRange().getValues();
   let i; 
   for(i=1;i<commandsArray.length;i++){
     if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)] == "") break;
-    if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)] == spicker){
+    if(commandsArray[i][tBotCommands.getCol(tBotCommands.columns.command_Title)] == command){
       let row = i+1;
-      tMaterials.use().getRange(row,2).setValue(JSON.stringify(postAdress));
+      sheet.deleteRow(row);
       return;
     }
   }
-  tMaterials.use().insertRowAfter(i);
-  tMaterials.use().getRange(i+1,1,1,2).setValues([[spicker,JSON.stringify(postAdress)]]);
+}
+
+function createMenuLevel(name){
+
+  let tNewCommands =  Object.assign({
+  sheetName: name,
+  columnsOrder: ["Строка","Кнопка","Ответ"],
+  }, TableMethods);
+
+  return tNewCommands.use().getSheetId();
 }

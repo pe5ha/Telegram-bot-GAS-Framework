@@ -15,5 +15,6 @@ function HelloMessasge(isUpdate=false){
   }
 
   USER.setCurrentAction(UserActions.without_action);
+  USER.setMenuLevel("");
   
 }

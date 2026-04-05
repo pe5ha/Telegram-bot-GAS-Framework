@@ -11,6 +11,10 @@ const TableMethods = {
     return this.use().getRange(this.allRange).getValues();
   },
 
+  getSheetId() {
+    return this.use().getSheetId();
+  },
+
   use() {
     let sheet = TABLE.getSheetByName(this.sheetName);
     if (!sheet) {

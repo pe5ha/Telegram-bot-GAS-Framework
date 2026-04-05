@@ -19,16 +19,17 @@ let AdminActions = { // TODO - пересмотреть
   input_push_b: "input_push_b",
   input_helloMessage: "input_helloMessage",
   edit_command: "edit_command",
+  delete_command: "delete_command",
   input_command: "input_command",
-  edit_material: "edit_material",
+  manage_commands: "manage_commands",
+  create_menuLevel: "create_menuLevel",
 
 }
 
 let BotStrings = {
   start_message_admin: {
     text: "У вас роль <b>администратора</b> в боте.\nВам доступны следующие возможности:"+
-    "\n/commands - список команд в боте"+
-    "\n/editcommand - редактировать/добавить команду"+
+    "\n/manage_commands - управлять командами в боте"+
     "\n/sethello - изменить приветсвие (команду /start)"
   },
 

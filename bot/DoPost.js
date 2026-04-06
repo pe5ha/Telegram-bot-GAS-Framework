@@ -36,6 +36,10 @@ function entryPoint(e){
   else if (contents.edited_message != null) {
     editMessageReceived(contents.edited_message);
   }
+  
+  else if (contents.my_chat_member !== null) {
+    myChatMemberReceived(contents.my_chat_member);
+  }
 
 
   // other updates
@@ -68,10 +72,6 @@ function entryPoint(e){
   }
 
   else if (contents.poll_answer !== null) {
-
-  }
-
-  else if (contents.my_chat_member !== null) {
 
   }
 

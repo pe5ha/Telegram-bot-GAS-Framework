@@ -1,5 +1,5 @@
 class User {
-  constructor(rowInTable, telegramID, nick, name, currentAction = null, role = null, menuLevel = null, activity = null, properties = null, isNewUser = false) {
+  constructor(rowInTable, telegramID, nick, name, currentAction = null, role = null, menuLevel = null, activity = null, properties = null, ban = null, isNewUser = false) {
     this.telegramID = telegramID;
     this.nick = nick;
     this.name = name;
@@ -10,6 +10,7 @@ class User {
     this.isNewUser = isNewUser;
     this.activity = activity;
     this.properties = properties;
+    this.ban = ban;
     this.tUsers = null;
   }
 
@@ -62,6 +63,36 @@ class User {
     
     return this;
   }
+
+  setIsBlockedBot(isBlocked){
+    this._validateTable();
+    const col = tUsers.getCol(tUsers.columns.ban) + 1;
+    if(isBlocked) {
+      this._updateCellValue(this.rowInTable, col, "bot blocked");
+      this.ban = "bot blocked";
+    }
+    else{
+      this._updateCellValue(this.rowInTable, col, "");
+      this.ban = "";
+    }
+    return this;
+  }
+
+  setIsBlockedByBot(isBlocked){
+    this._validateTable();
+    const col = tUsers.getCol(tUsers.columns.ban) + 1;
+    if(isBlocked) {
+      this._updateCellValue(this.rowInTable, col, "user blocked");
+      this.ban = "user blocked";
+    }
+    else{
+      this._updateCellValue(this.rowInTable, col, "");
+      this.ban = "";
+    }
+    return this;
+  }
+
+
 
   // Приватный метод для обновления значения ячейки
   _updateCellValue(row, col, value) {

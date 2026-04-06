@@ -1,13 +1,7 @@
 function checkForCommand(){
+  let sheetId = USER.menuLevel ? USER.menuLevel : tBotCommands.getSheetId();
+  return executeCommand(sheetId, MESSAGE_TEXT);
 
-  if(USER.menuLevel){
-    let sheetId = USER.menuLevel;
-    executeCommand(sheetId, MESSAGE_TEXT);
-  }
-  else {
-    let sheetId = TABLE.getSheetByName(tBotCommands.sheetName).getSheetId();
-    executeCommand(sheetId, MESSAGE_TEXT);
-  }
 }
 
 /**

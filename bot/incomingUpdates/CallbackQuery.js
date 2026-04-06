@@ -7,7 +7,7 @@ function callbackQueryReceived(callback_query) {
   BUTTON_DATA = callback_query.data;
 
   // initial user checking
-  userRegister(USER_ID);
+  userRegister.check(USER_ID, USER_NICK, USER_NAME);
 
   logUpdate("Кнопка: ", BUTTON_DATA);
 

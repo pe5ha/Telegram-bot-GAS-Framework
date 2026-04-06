@@ -50,10 +50,11 @@ const tUsers = Object.assign({
     role: "Роль",
     menuLevel: "Уровень меню",
     activity: "Активность",
-    properties: "Свойства"
+    properties: "Свойства",
+    ban: "Бан"
   },
-  columnsOrder: ["Дата рег.","Телеграм ID","Ник","Имя","Действие","Роль","Уровень меню","Активность","Свойства"],
-  allRange: "A:H"
+  columnsOrder: ["Дата рег.","Телеграм ID","Ник","Имя","Действие","Роль","Уровень меню","Активность","Свойства","Бан"],
+  allRange: "A:I"
 }, TableMethods);
 
 let tLog = Object.assign({
@@ -81,6 +82,23 @@ let tBotCommands =  Object.assign({
   columnsOrder: ["Строка","Кнопка","Ответ"],
   allRange: "A:C"
   }, TableMethods);
+
+let tBotChats =  Object.assign(
+  {
+    sheetName: "Чаты бота",
+    columns: {
+      id_Title: "id",
+      nick_Title: "никнейм",
+      name_Title: "название",
+      type_Title: "тип",
+      status_Title: "статус",
+      date_Title: "дата",
+    },
+    columnsOrder: ["id","тип","название","никнейм","статус","дата"],
+    allRange: "A:F",
+  },
+  TableMethods
+);
 
   
 /** tBotValues sheet structure

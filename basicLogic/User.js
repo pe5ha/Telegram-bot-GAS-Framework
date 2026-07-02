@@ -116,6 +116,23 @@ class User {
     return new User(rowInTable, telegramID, nick, name, currentAction, role, menuLevel, activity, properties, isNewUser);
   }
 
+  static getUserFromDataById(USERS_DATA, id){
+    let row = findRowIn2dRange(USERS_DATA,tUsers.getCol(tUsers.columns.id),parseInt(id));
+    if(row != -1){
+      return new User(
+        row + 1, 
+        id, 
+        USERS_DATA[row][tUsers.getCol(tUsers.columns.nick)], 
+        USERS_DATA[row][tUsers.getCol(tUsers.columns.name)], 
+        USERS_DATA[row][tUsers.getCol(tUsers.columns.currentAction)], 
+        USERS_DATA[row][tUsers.getCol(tUsers.columns.role)], 
+        USERS_DATA[row][tUsers.getCol(tUsers.columns.activity)], 
+        USERS_DATA[row][tUsers.getCol(tUsers.columns.properties)]
+      );
+    }
+    else return null;
+  }
+
   // Обновление данных пользователя
   update(data) {
     Object.keys(data).forEach(key => {

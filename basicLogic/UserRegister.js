@@ -5,7 +5,6 @@
 const userRegister = {
 
   check(id, nick, name) {
-    USERS_DATA = tUsers.use().getRange(tUsers.allRange).getValues();
     const row = this._findUserRow(USERS_DATA, id);
 
     if (row === -1) {

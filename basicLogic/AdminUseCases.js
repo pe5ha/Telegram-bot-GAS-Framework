@@ -19,6 +19,9 @@ function adminUseCases(){
     USER.setCurrentAction(AdminActions.input_helloMessage);
     botSendMessage(CHAT_ID,"Присылайте новое приветсвенное сообщение или нажмите /cancel для отмены");
   }
+  else if(MESSAGE_TEXT=="/table"){
+    botSendMessage(CHAT_ID,"Таблица в которой работает бот: " + TABLE.getUrl());
+  }
   else if(MESSAGE_TEXT== "/manage_commands"){
     USER.setCurrentAction(AdminActions.manage_commands)
     botSendMessage(CHAT_ID,"Вы можете управлять командами бота (редактировать, добавлять, удалять) или нажмите /cancel для отмены",subMenuKeyboard(tBotCommands.getSheetId()));
@@ -70,7 +73,21 @@ function adminUseCases(){
     return false;
   }
 
+  else if(MESSAGE_TEXT=="/push"){
+    USER.setCurrentAction(AdminActions.input_push);
+    botSendMessage(CHAT_ID,"Присылайте сообщение для рассылки или нажмите /cancel для отмены."+
+      "\n\nК сообщению будут добавлены кнопки из листа <b>Кнопки</b>"+
+      "\n\nСообщение получат все пользователи из листа <b>Push</b>");
+  }
+  else if(USER.currentAction==AdminActions.input_push){
+    USER.setCurrentAction(UserActions.without_action);
+    PushMessagePrepare();
+  }
 
+  else if(MESSAGE_TEXT=="/confirm_push"){
+    USER.setCurrentAction(UserActions.without_action);
+    broadcastPushService();
+  }
 
 
   else if(USER.currentAction==AdminActions.input_helloMessage){

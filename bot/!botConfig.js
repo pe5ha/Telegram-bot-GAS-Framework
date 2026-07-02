@@ -37,9 +37,9 @@ let USER = new User();
 let TOKEN = PropertiesService.getScriptProperties().getProperty('BOT_TOKEN');
 let activeSheet = SpreadsheetApp.getActive();
 let SpreadsheetID;
-if(activeSheet)
-  SpreadsheetID = activeSheet.getId();
-if(!SpreadsheetID)
+// if(activeSheet)
+//   SpreadsheetID = activeSheet.getId();
+// if(!SpreadsheetID)
   SpreadsheetID = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
 // google tables service variables
 let TABLE = SpreadsheetApp.openById(SpreadsheetID);
@@ -53,9 +53,22 @@ function getTableId(){return TABLE.getId();}
  */
 function botInitialization(){
   // USER = new User();
+  
+  USERS_DATA = tUsers.use().getDataRange().getValues();
 
   ERRORS_LOG_CHAT = PropertiesService.getScriptProperties().getProperty('ERRORS_CHAT');
+  
   BOT_USERNAME = PropertiesService.getScriptProperties().getProperty('BOT_USERNAME');
+  if(!BOT_USERNAME) BOT_USERNAME = initBotUsername('BOT_USERNAME');
+  
 
   MAIN_KEYBOARD = subMenuKeyboard(TABLE.getSheetByName(tBotCommands.sheetName).getSheetId());
+}
+
+
+function initBotUsername(propertyToSet='BOT_USERNAME'){
+  let resp = TelegramAPI.getMe(TOKEN);
+  let botUsername = resp.result.username;
+  PropertiesService.getScriptProperties().setProperty(propertyToSet, botUsername);
+  return botUsername;
 }

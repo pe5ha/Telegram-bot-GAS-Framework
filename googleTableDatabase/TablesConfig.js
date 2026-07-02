@@ -100,6 +100,71 @@ let tBotChats =  Object.assign(
   TableMethods
 );
 
+const tPush = Object.assign({
+  sheetName: "Рассылки",
+  message: "B3",
+  buttons_type: "B5",
+  buttons_link: "E5",
+  sending_type: "B7",
+  whom_to_send: "B9",
+  start_row_index: 11,
+  columns: {
+  id_Title: "Телеграм ID",
+  nick_Title: "Ник",
+  name_Title: "Имя",
+  messageTime_Title: "Время отправки",
+  message_Title: "Статус отправки",
+  },
+  columnsOrder: ["Телеграм ID",	"Ник",	"Имя","Время отправки",	"Статус отправки"],
+  allRange: "A:E"
+}, TableMethods);
+
+const tPushHistory = Object.assign({
+  sheetName: "Push",
+  columns: {
+  id_Title: "Телеграм ID",
+  nick_Title: "Ник",
+  name_Title: "Имя",
+  reaction_Title: "Реакция",
+  reactionTime_Title: "Время реакции",
+  messageTime_Title: "Время отправки",
+  message_Title: "Статус отправки",
+  },
+  columnsOrder: ["Телеграм ID",	"Ник",	"Имя",	"Реакция",	"Время реакции",	"Время отправки",	"Статус отправки"],
+  allRange: "A:G"
+}, TableMethods);
+
+const tPlayers = Object.assign({
+  sheetName: "Го-клуб ИТМО",
+  columns: {
+  id_Title: "Телеграм ID",
+  name_Title: "Имя",
+  isu_Title: "ИСУ",
+  status_Title: "Статус",
+  rank_Title: "Ранг",
+  rankHistory_Title: "История ранга",
+  games_Title: "Кол-во игр",
+  lastGameDate_Title: "Дата обновления",
+  },
+  columnsOrder: ["Телеграм ID",	"Имя",	"ИСУ",	"Статус",	"Ранг",	"История ранга",	"Кол-во игр",	"Дата обновления"],
+}, TableMethods);
+
+const tGames = Object.assign({
+  sheetName: "Партии",
+  columns: {
+  id_Title: "ID партии",
+  date_Title: "Дата",
+  board_Title: "Доска",
+  handicap_Title: "Фора",
+  player1_Title: "Игрок 1 (W)",
+  player2_Title: "Игрок 2 (B)",
+  winner_Title: "Победил",
+  results_Title: "Результат",
+
+  },
+  columnsOrder: [ "ID партии",	"Дата",	"Доска",	"Фора",	"Игрок 1 (W)",	"Игрок 2 (B)",	"Победил",	"Результат"],
+}, TableMethods);
+
   
 /** tBotValues sheet structure
  * @deprecated
